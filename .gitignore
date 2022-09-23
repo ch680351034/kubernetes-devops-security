@@ -27,4 +27,5 @@ bin
 .project
 target
 
+#vscode related files
 .vscode
