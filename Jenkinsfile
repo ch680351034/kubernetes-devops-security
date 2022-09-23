@@ -28,7 +28,7 @@ pipeline {
               sh 'printenv'
               sh 'docker build -t ch680351034/numeric-app:$GIT_COMMIT .'
               sh 'docker push ch680351034/numeric-app:$GIT_COMMIT'
-              sh 'docker image prune -f ch680351034/numeric-app:$GIT_COMMIT'
+              sh 'docker image prune -fa'
               }
 
             }
