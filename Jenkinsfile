@@ -39,7 +39,7 @@ pipeline {
               withKubeConfig(credentialsId: 'k8s') {
               sh 'kubectl version --short'
               sh '''
-              sed -i 's/replace/ch680351034/numeric-app:${GIT_COMMIT}/g' k8s_deployment_service.yml
+              sed -i 's/replace/ch680351034/numeric-app:${GIT_COMMIT}/g' k8s_deployment_service.yaml
               '''
               //sh "sed -i 's#replace#ch680351034/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yml"
               sh 'kubectl apply -f k8s_deployment_service.yml'
