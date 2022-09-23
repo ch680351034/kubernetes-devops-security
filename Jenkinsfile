@@ -36,7 +36,7 @@ pipeline {
 
             stage('k8s deploy') {
             steps {
-              withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', serverUrl: '') {
+              withKubeConfig(credentialsId: 'k8s') {
               sh 'kubectl version --short'
               }
 
