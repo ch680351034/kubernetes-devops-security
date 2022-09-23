@@ -34,5 +34,14 @@ pipeline {
             }
          } 
 
+            stage('k8s deploy') {
+            steps {
+              withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', serverUrl: '') {
+              sh 'kubectl version --short'
+              }
+
+            }
+         }
+
     }
 }
