@@ -23,7 +23,7 @@ pipeline {
             }
         } 
 
-              stage('Sonar SAST') {
+        stage('Sonar SAST') {
             steps {
               sh '''mvn sonar:sonar \
                   -Dsonar.projectKey=numeric-app \
@@ -31,6 +31,15 @@ pipeline {
                   -Dsonar.login=6d96b9057c792af87020ac9c882e58e730ed89bf'''
             }
         } 
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
               stage('docker build and push') {
             steps {
               withDockerRegistry(credentialsId: 'dockerhub', url: '') {
