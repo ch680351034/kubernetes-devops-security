@@ -25,11 +25,10 @@ pipeline {
 
         stage('Sonar SAST') {
             steps {
-              sh '''mvn sonar:sonar \
-                  -Dsonar.projectKey=numeric-app \
-                  -Dsonar.host.url=http://3.85.227.111:9000 \
-                  -Dsonar.login=6d96b9057c792af87020ac9c882e58e730ed89bf'''
+              withSonarQubeEnv('sonarqube') {
+              sh 'mvn sonar:sonar'
             }
+          }
         } 
         stage("Quality Gate") {
             steps {
@@ -41,7 +40,7 @@ pipeline {
                 }
             }
         }
-              stage('docker build and push') {
+        stage('docker build and push') {
             steps {
               withDockerRegistry(credentialsId: 'dockerhub', url: '') {
               sh 'printenv'
