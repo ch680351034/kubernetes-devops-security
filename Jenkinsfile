@@ -13,24 +13,16 @@ pipeline {
             steps {
               sh "mvn test"
             }
-            post {
-              always {
-                junit 'target/surefire-reports/*.xml'
-                //jacoco execPattern: 'target/jacoco.exec'
-                jacoco()
-
-              }
-            }
         } 
 
-        stage('Sonar SAST') {
+      stage('Sonar SAST') {
             steps {
               withSonarQubeEnv('sonarqube') {
               sh 'mvn sonar:sonar'
             }
           }
         } 
-        stage("Quality Gate") {
+      stage("Quality Gate") {
             steps {
                 timeout(time: 2, unit: 'MINUTES') {
                     // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
@@ -41,19 +33,14 @@ pipeline {
             }
         }
 
-         stage("dependency_check") {
+      stage("dependency_check") {
             steps {
               sh 'mvn verify'
-            }
-            post {
-              always {
-                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-              }
             }
         }
 
         
-        stage('docker build and push') {
+      stage('docker build and push') {
             steps {
               withDockerRegistry(credentialsId: 'dockerhub', url: '') {
               sh 'printenv'
@@ -65,7 +52,7 @@ pipeline {
             }
          } 
             //$sed 's/unix/linux/' geekfile.txt
-            stage('k8s deploy') {
+      stage('k8s deploy') {
             steps {
               withKubeConfig(credentialsId: 'k8s') {
               sh 'kubectl version --short'
@@ -76,8 +63,13 @@ pipeline {
 
             }
          }
-
-         
-
+    }
+    post {
+     always {
+      junit 'target/surefire-reports/*.xml'
+      //jacoco execPattern: 'target/jacoco.exec'
+      jacoco()
+      dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+      }
     }
 }
