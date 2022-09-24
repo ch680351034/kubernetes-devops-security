@@ -40,6 +40,19 @@ pipeline {
                 }
             }
         }
+
+         stage("dependency_check") {
+            steps {
+              sh 'mvn verify'
+            }
+            post {
+              always {
+                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+              }
+            }
+        }
+
+        
         stage('docker build and push') {
             steps {
               withDockerRegistry(credentialsId: 'dockerhub', url: '') {
